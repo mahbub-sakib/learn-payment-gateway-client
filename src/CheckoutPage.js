@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 const CheckoutPage = () => {
@@ -18,7 +19,20 @@ const CheckoutPage = () => {
         e.preventDefault();
         console.log("Order Placed:", formData);
         // Add your order submission logic here
-        alert(`Order placed for ${formData.productName}`);
+        axios.post('http://localhost:5000/create-payment', {
+            amount: 10000,
+            currency: "USD",
+        })
+            .then((response) => {
+                console.log(response);
+
+                const redirectUrl = response.data.paymentUrl;
+
+                if (redirectUrl) {
+                    window.location.replace(redirectUrl);
+                }
+            })
+        // alert(`Order placed for ${formData.productName}`);
     };
 
     return (
@@ -37,7 +51,7 @@ const CheckoutPage = () => {
                             value={formData.productName}
                             onChange={handleChange}
                             className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                            required
+
                         />
                     </div>
 
@@ -52,7 +66,7 @@ const CheckoutPage = () => {
                             value={formData.price}
                             onChange={handleChange}
                             className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                            required
+
                         />
                     </div>
 
@@ -67,7 +81,7 @@ const CheckoutPage = () => {
                             value={formData.date}
                             onChange={handleChange}
                             className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                            required
+
                         />
                     </div>
 
